@@ -1,0 +1,13 @@
+.grid {
+    width: 500px;
+    height: 250px;
+}
+
+.chart {
+    width: 1000px;
+    height: 500px;
+}
+
+.blue { color: yellow;  background-color: blue!important; }
+
+.white { color: black; background-color: white!important; }
