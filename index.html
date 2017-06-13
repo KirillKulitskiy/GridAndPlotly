@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-touch.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/csv.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/pdfmake.js"></script>
+    <script src="http://ui-grid.info/docs/grunt-scripts/vfs_fonts.js"></script>
+    <script src="http://ui-grid.info/release/ui-grid.js"></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <link rel="stylesheet" href="http://ui-grid.info/release/ui-grid.css" type="text/css">
+    <link rel="stylesheet" href="main.css" type="text/css">
+</head>
+<body>
+<div ng-controller="mainController">
+    <div id="grid1" ui-grid="{ data: gridData }" class="grid"></div>
+</div>
+
+<div id="tester" style="width:600px;height:250px;"></div>
+
+    <script>
+        var app = angular.module('app', ['ngTouch', 'ui.grid']);
+
+        app.controller('mainController', ['$scope', function($scope){
+            console.log("another trial");
+            $scope.gridData = [
+                {
+                    "firstName": "Cox",
+                    "lastName": "Carney",
+                    "company": "Enormo",
+                    "employed": true
+                },
+                {
+                    "firstName": "Lorraine",
+                    "lastName": "Wise",
+                    "company": "Comveyer",
+                    "employed": false
+                },
+                {
+                    "firstName": "Nancy",
+                    "lastName": "Waters",
+                    "company": "Fuelton",
+                    "employed": false
+                }];
+        }]);
+
+        TESTER = document.getElementById('tester');
+        Plotly.plot( TESTER, [{
+            x: [1, 2, 3, 4, 5],
+            y: [1, 2, 4, 8, 16] }], {
+            margin: { t: 0 } } );
+    </script>
+
+</body>
+</html>
