@@ -1,82 +1,44 @@
 var app = angular.module('app', ['ngTouch', 'ui.grid']);
 
-app.controller('mainController', ['$scope', 'uiGridConstants', function($scope, uiGridConstants){
-    console.log("another trial");
-    $scope.x = [1, 2, 3, 4, 5];
-    $scope.y = [1, 2, 4, 8, 16];
+function generateArray(numberOfElements, filler){
+    var result = [];
+    for(var i=0; i < numberOfElements; i++) {
+        result.push(filler);
+    }
+    return result;
+}
 
-    $scope.gridData = [
-        {
-            1: $scope.y[0],
-            2: $scope.y[1],
-            3: $scope.y[2],
-            4: $scope.y[3],
-            5: $scope.y[4]
-        },
-        {
-            1: $scope.y[0],
-            2: $scope.y[1],
-            3: $scope.y[2],
-            4: $scope.y[3],
-            5: $scope.y[4]
-        },
-        {
-            1: $scope.y[0],
-            2: $scope.y[1],
-            3: $scope.y[2],
-            4: $scope.y[3],
-            5: $scope.y[4]
-        },
-        {
-            1: $scope.y[0],
-            2: $scope.y[1],
-            3: $scope.y[2],
-            4: $scope.y[3],
-            5: $scope.y[4]
-        },
-        {
-            1: $scope.y[0],
-            2: $scope.y[1],
-            3: $scope.y[2],
-            4: $scope.y[3],
-            5: $scope.y[4]
-        }];
+app.controller('mainController', ['$scope', 'uiGridConstants', function($scope, uiGridConstants){
+    var x = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    var y = [1, 2, 4, 8, 16, 20, 24, 28, 32];
 
     $scope.gridOptions = {
-        data: $scope.gridData,
-        columnDefs: [
-            {field: 1,
-                cellClass: 'white'},
-            {field: 2,
-                cellClass: 'white'},
-            {field: 3,
-                cellClass: 'white'},
-            {field: 4,
-                cellClass: 'white'},
-            {field: 5,
-                cellClass: 'white'}],
+        data: generateArray(9, Object.assign({},y)),
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
         }
     };
 
     //ToDo: figure out how to implement the bar chart meaningfully representing data from multirow table (stacked bar chart won't work).
-    $scope.chartType = 'bar';
     TESTER = document.getElementById('tester');
     Plotly.plot( TESTER, [{
-        x: $scope.x,
-        y: $scope.y,
-        type:$scope.chartType}], {
-        margin: { t: 0 } } );
+        x: x,
+        y: y,
+        type:'bar'}],
+        { margin: { t: 0},
+            xaxis: {fixedrange: true},
+            yaxis: {fixedrange: true}
+        }, {scrollZoom: false} );
     TESTER.on('plotly_click', function(data){
-        for(var i=0; i < $scope.gridOptions.columnDefs.length; i++) {
-            $scope.gridOptions.columnDefs[i].cellClass = function(grid, row, col, rowRenderIndex, i) {
+        $scope.gridOptions.columnDefs.forEach(function(item) {
+            item.cellClass = function(grid, row, col, rowRenderIndex) {
                 if (rowRenderIndex == data.points[0].x - 1) {
+                    $scope.gridApi.grid.element[0].getElementsByClassName("ui-grid-viewport")[0].scrollTop = rowRenderIndex * 250/$scope.gridOptions.data.length;
                     return 'blue';
                 }
                 return 'white';
             }
-        }
+        });
 
         $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
     });
